@@ -20,18 +20,17 @@ app.get("/api/courses", (req, res) => {
 
 app.get("/api/courses/:id", (req, res) => {
   const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send("course with the given ID not found");
+  if (!course)
+    return res.status(404).send("course with the given ID not found");
   res.send(course);
 });
 
 app.post("/api/courses", (req, res) => {
   const { error } = validateCourse(req.body);
 
-  if (error) {
+  if (error)
     //400 bad request
-    res.status(400).send(error.details[0].message);
-    return;
-  }
+    return res.status(400).send(error.details[0].message);
 
   const course = {
     id: courses.length + 1,
@@ -45,21 +44,35 @@ app.put("/api/courses/:id", (req, res) => {
   //Look up the course
   //if nonexisting return 404
   const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send("course with the given ID not found");
+  if (!course)
+    return res.status(404).send("course with the given ID not found");
 
   //validate
   //if invalid, return 400, bad request
   const { error } = validateCourse(req.body);
 
-  if (error) {
+  if (error)
     //400 bad request
-    res.status(400).send(error.details[0].message);
-    return;
-  }
+    return res.status(400).send(error.details[0].message);
 
   //update course
   course.name = req.body.name;
   //return the updated course
+  res.send(course);
+});
+
+app.delete("/api/courses/:id", (req, res) => {
+  //Look up the course
+  //not existing, return 404 not found
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    return res.status(404).send("course with the given ID not found");
+
+  //Delete
+  const index = courses.indexOf(course);
+  courses.splice(index, 1);
+
+  //return the same course
   res.send(course);
 });
 
