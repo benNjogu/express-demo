@@ -4,6 +4,10 @@ const authenticator = require("./authenticator");
 const express = require("express");
 
 const app = express();
+
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);//undefined
+console.log(`app: ${app.get("env")}`);//development
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
