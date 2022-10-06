@@ -8,6 +8,8 @@ const authenticator = require("./authenticator");
 const express = require("express");
 
 const app = express();
+app.set("view engine", "pug");
+app.set("views", "./views");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,7 +20,6 @@ app.use(morgan("tiny"));
 //Configuration
 console.log(`Application name: ${config.get("name")}`);
 console.log(`Mail server: ${config.get("mail.host")}`);
-console.log(`Mail password: ${config.get("mail.password")}`);
 
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
@@ -36,7 +37,7 @@ const courses = [
 ];
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.render("index", { title: "My Express App", message: "Hello" });
 });
 
 app.get("/api/courses", (req, res) => {
