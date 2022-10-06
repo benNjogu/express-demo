@@ -1,3 +1,4 @@
+const config = require("config");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const Joi = require("joi");
@@ -13,10 +14,11 @@ app.use(express.static("public"));
 app.use(helmet());
 app.use(morgan("tiny"));
 
+//Configuration
+console.log(`Application name: ${config.get("name")}`);
+console.log(`Mail server: ${config.get("mail.host")}`);
+console.log(`Mail password: ${config.get("mail.password")}`);
 
-/**
- * The below helps to know whether the app is running on development, testing or production environment
- */
 if (app.get("env") === "development") {
   app.use(morgan("tiny"));
   console.log("Morgan enabled");
